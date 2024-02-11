@@ -1,0 +1,213 @@
+﻿@page
+@model YourPageModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<script>
+    function changeColor(selectElement) {
+        //var currentBackgroundColor = window.getComputedStyle(selectElement).backgroundColor;
+        //selectElement.style.backgroundColor = '#dcffba'; /* светло-зелёный цвет */
+        //selectElement.style.border = '1px solid gray'; /* Тонкая граница светло-зелёного цвета */
+        //selectElement.style.borderRadius = '3px'; /* Скруглённые края */
+
+    }
+</script>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('select[name^="Questions["]').prepend('<option value="" disabled selected>Select an option</option>');
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                // Показать модальное окно Bootstrap с уведомлением
+                $('#successModal').modal('show');
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                $('#successModal').modal('show');
+
+                // Обработчик события закрытия модального окна
+                $('#successModal').on('hidden.bs.modal', function () {
+                    // Очистить сообщение об успехе в TempData после закрытия окна
+                    '@TempData["SuccessMessage"]' = null;
+                });
+            }
+        });
+    </script>
+}
+
+
+<style>
+    #yourSelectElement {
+        background-color: initial; /* начальный цвет */
+        /* Другие стили по вашему выбору */
+    }
+</style>
+
+<style>
+    .question-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .question-frame {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+        width: 400px;
+        text-align: left; /* Выравнивание текста по левому краю */
+    }
+
+    .question-input {
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center; /* Выравнивание по вертикали */
+    }
+
+    .question-input label {
+        width: 80%; /* Ширина label */
+        text-align: left; /* Выравнивание текста по левому краю в label */
+        margin-right: 10px; /* Отступ между label и input */
+    }
+
+    .question-input input {
+        width: 20%; /* Занимает 100% ширины доступной области */
+        box-sizing: border-box; /* Чтобы полная ширина включала в себя padding и border */
+        text-align: right; /* Выравнивание текста по правому краю в input */
+    }
+
+    .question-input select
+    {
+        width: 20%; /* Занимает 100% ширины доступной области */
+        box-sizing: border-box; /* Чтобы полная ширина включала в себя padding и border */
+    }
+
+    h1 {
+        text-align: center; /* Центрирует текст внутри элемента h1 */
+    }
+
+    .put label {
+        width: 80%; /* Ширина label */
+        margin-right: 10px; /* Отступ между label и input */
+    }
+
+    .put input {
+        width: 20%; /* Занимает 100% ширины доступной области */
+        text-align: right; /* Выравнивание текста по правому краю в input */
+    }
+
+</style>
+
+
+<h1>Психологический тест</h1>
+
+<p>
+    Данный тест позволяет определить ваше командное амплуа, то есть способ, которым вы реализуете свои таланты.<br /><br />
+    Вас ждет 24 набора позитивных качеств, которые необходимо проранжировать от 1 до 4, чтобы определить ваш уникальный стиль.<br />
+    1 – «наиболее мне соответствует», 4 – «наименее мне соответствует».<br /><br />
+    Тест займет около 10 минут. Результаты будут отправлены на указанную вами почту.<br /><br />
+    Проранжируйте качества от 1 до 4, где 1 – «наиболее мне соответствует», а 4 – «наименее мне соответствует».
+</p>
+
+@{
+    int frameNumber = 1; // начальное значение номера рамки
+}
+
+@{
+    int frameNumber2 = 1; // начальное значение номера рамки
+}
+
+@{
+    var arr = new List<string>();
+}
+
+<div class="text-center">
+<form method="post">
+    <div class="put">
+        <label for="firstName">Фамилия:</label>
+            <input type="text" id="lastName" name="LastName" required />
+    </div>
+
+        <div class="put">
+        <label for="lastName">Имя:</label>
+        <input type="text" id="firstName" name="FirstName" required />
+    </div>
+
+        <div class="put">
+        <label for="middleName">Отчество:</label>
+        <input type="text" id="middleName" name="MiddleName" required />
+    </div>
+
+
+    @foreach (var frame in Model.Frames)
+    //@for (int i = 0; i < Model.FieldNamesList.Count; i++)
+    {
+        <div class="question-container">
+            <div class="question-frame">
+                <h3>#@(frameNumber++)</h3>
+            @foreach (var question in frame.FrameContent)
+            {
+                    <div class="question-input">
+                        <label for="field@(frameNumber2++)">@(question.FieldName)</label>
+                            <select name="values" onchange="changeColor(this)">
+                                <!--<option value="" disabled selected>1</option>-->
+                            
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                
+            }
+            </div>
+        </div>
+
+    }
+    <div>
+        <button type="submit">Отправить данные</button>
+    </div>
+</form>
+</div>
+
+
+<!-- Модальное окно Bootstrap -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Уведомление</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @TempData["SuccessMessage"]
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Ваши вопросы здесь -->
+
+
+
+
+
+
