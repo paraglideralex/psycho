@@ -57,6 +57,7 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
 
         var fiel = Fields.Select(f => $"{f.FieldName};{f.Value}");
         // Записываем содержимое в файл
+        /*
         using var writer = new System.IO.StreamWriter(filePath, true, System.Text.Encoding.UTF8);
         writer.WriteLine($"Фамилия;{LastName}");
         writer.WriteLine($"Имя;{FirstName}");
@@ -66,11 +67,11 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
         {
             writer.WriteLine(st);
         }
-        writer.WriteLine();
+        writer.WriteLine();*/
         var process = new TestProcessor(values);
         var answer = process.Process();
 
-        writer.WriteLine($"Ваш подтип;{answer}");
+        //writer.WriteLine($"Ваш подтип;{answer}");
         // Записываем содержимое в файл
         //System.IO.File.WriteAllLines(filePath, Fields.Select(f => $"{f.FieldName};{f.Value}"));
         // Уведомление об успешной загрузке данных
