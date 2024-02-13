@@ -104,9 +104,22 @@
     }
 
     .put input {
-        width: 20%; /* Занимает 100% ширины доступной области */
-        text-align: right; /* Выравнивание текста по правому краю в input */
+        width: 35%; /* Занимает 100% ширины доступной области */
+        text-align: center; /* Выравнивание текста по правому краю в input */
     }
+
+    .custom-button {
+        padding: 12px 24px; /* Увеличенные отступы для более крупной кнопки */
+        font-size: 22px; /* Увеличенный размер текста */
+        border: 1px solid #ccc; /* Тонкая граница цвета #ccc */
+        border-radius: 5px; /* Скругленные углы */
+        background-color: #f5f5f5; /* Светло-серый цвет фона */
+        cursor: pointer; /* Индикация указателя при наведении */
+    }
+
+        .custom-button:hover {
+            background-color: #ddd; /* Изменение цвета фона при наведении */
+        }
 
 </style>
 
@@ -120,6 +133,8 @@
     Тест займет около 10 минут. Результаты будут отправлены на указанную вами почту.<br /><br />
     Проранжируйте качества от 1 до 4, где 1 – «наиболее мне соответствует», а 4 – «наименее мне соответствует».
 </p>
+
+<p><b>Обязательно введите фамилию, имя и отчество.</b></p>
 
 @{
     int frameNumber = 1; // начальное значение номера рамки
@@ -136,17 +151,17 @@
 <div class="text-center">
 <form method="post">
     <div class="put">
-        <label for="firstName">Фамилия:</label>
+        <h5 for="firstName">Фамилия:</h5>
             <input type="text" id="lastName" name="LastName" required />
     </div>
 
         <div class="put">
-        <label for="lastName">Имя:</label>
+        <h5 for="lastName">Имя:</h5>
         <input type="text" id="firstName" name="FirstName" required />
     </div>
 
         <div class="put">
-        <label for="middleName">Отчество:</label>
+        <h5 for="middleName">Отчество:</h5>
         <input type="text" id="middleName" name="MiddleName" required />
     </div>
 
@@ -155,30 +170,31 @@
     //@for (int i = 0; i < Model.FieldNamesList.Count; i++)
     {
         <div class="question-container">
-            <div class="question-frame">
+            <div class="question-frame" id="frame@(frameNumber)">
                 <h3>#@(frameNumber++)</h3>
-            @foreach (var question in frame.FrameContent)
-            {
+                @foreach (var question in frame.FrameContent)
+                {
                     <div class="question-input">
                         <label for="field@(frameNumber2++)">@(question.FieldName)</label>
-                            <select name="values" onchange="changeColor(this)">
-                                <!--<option value="" disabled selected>1</option>-->
-                            
+                        <select name="values">
+                            <!--<option value="" disabled selected>1</option>-->
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                         </select>
                     </div>
-                
-            }
+                }
             </div>
         </div>
 
     }
-    <div>
-        <button type="submit">Отправить данные</button>
-    </div>
+@*        <div>
+            <button type="submit" onclick="checkAndSubmit(event)">Отправить данные</button>
+        </div>*@
+        <div>
+            <button type="submit" class="custom-button">Отправить данные</button>
+        </div>
 </form>
 </div>
 
@@ -204,7 +220,7 @@
 </div>
 
 
-<!-- Ваши вопросы здесь -->
+
 
 
 

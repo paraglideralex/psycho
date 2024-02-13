@@ -1,17 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System;
-using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 using Psycho;
 
+
 public class YourPageModel : PageModel, IEnumerable<FieldData>
 {
     private static string logFile = "answer.csv";
     private string questions = "wwwroot/names.txt";
+    int frameCounter;
     public YourPageModel()
     {
         QuestionsField = new();
@@ -40,6 +38,47 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
 
     [BindProperty]
     public List<FieldData> Fields { get; set; } = new();
+
+    private bool Repeats(List<string> values, out int index)
+    {
+        index = 0;
+        foreach (var frame in Frames)
+        {
+            index++;
+            if (HasDuplicates(frame.FrameContent))
+            {
+                TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения";// рамки #{index}.";
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool HasDuplicates(List<FieldData> fieldDataList)
+    {
+        // Проверка, есть ли хотя бы одна группа с более чем одним элементом (дубликаты)
+        return fieldDataList.GroupBy(data => data.Value)
+                            .Any(group => group.Count() > 1);
+    }
+
+    private void Log(string answer)
+    {
+        using var writer = new System.IO.StreamWriter(logFile, true, System.Text.Encoding.UTF8);
+        writer.WriteLine($"Фамилия;{LastName}");
+        writer.WriteLine($"Имя;{FirstName}");
+        writer.WriteLine($"Отчество;{MiddleName}");
+
+        var fiel = Fields.Select(f => $"{f.FieldName};{f.Value}");
+
+        foreach (var st in fiel)
+        {
+            writer.WriteLine(st);
+        }
+        writer.WriteLine();
+        writer.WriteLine($"Ваш подтип;{answer}");
+        writer.WriteLine();
+    }
+
     public IActionResult OnPost(List<string> values)
     {
         int counter = 0;
@@ -52,29 +91,19 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
             }
         }
 
-        // Укажите путь к файлу, куда нужно сохранить данные
-        string filePath = logFile;
-
-        var fiel = Fields.Select(f => $"{f.FieldName};{f.Value}");
-        // Записываем содержимое в файл
-        /*
-        using var writer = new System.IO.StreamWriter(filePath, true, System.Text.Encoding.UTF8);
-        writer.WriteLine($"Фамилия;{LastName}");
-        writer.WriteLine($"Имя;{FirstName}");
-        writer.WriteLine($"Отчество;{MiddleName}");
         
-        foreach (var st in fiel)
-        {
-            writer.WriteLine(st);
-        }
-        writer.WriteLine();*/
+        // Записываем содержимое в файл
+
         var process = new TestProcessor(values);
         var answer = process.Process();
 
-        //writer.WriteLine($"Ваш подтип;{answer}");
-        // Записываем содержимое в файл
-        //System.IO.File.WriteAllLines(filePath, Fields.Select(f => $"{f.FieldName};{f.Value}"));
-        // Уведомление об успешной загрузке данных
+        //Log();
+
+        if(Repeats(values, out int ind))
+        {
+            return RedirectToPage();
+        }
+
         TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
 
         return RedirectToPage();
