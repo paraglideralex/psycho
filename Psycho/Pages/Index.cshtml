@@ -183,7 +183,7 @@
                     {
                     <div class="question-input">
                         <label for="field@(frameNumber2++)">@(frame.FrameContent[i].FieldName)</label>
-                        <select name="values">
+                            <select name="values" title="1 – «наиболее мне соответствует», 4 – «наименее мне соответствует»">
                         @if (frame.FrameContent[i].Value == "1")
                         {
                             <option value="1" selected>1</option>
