@@ -5,16 +5,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Psycho;
 
 
-public class YourPageModel : PageModel, IEnumerable<FieldData>
+public class YourPageModel : PageModel
 {
     private static string logFile = "answer.csv";
     private string questions = "wwwroot/names.txt";
     int frameCounter;
+
+    public List<QuestionModel> Questions { get; set; } = new();
+
+    public List<FieldData> QuestionsField { get; set; }
+
+    public List<FrameData> Frames { get; set; }
+
     public YourPageModel()
     {
         QuestionsField = new();
         Frames = new();
-        FillFrames();
+        Frames.AddRange(PageState.Frames);
     }
 
     public static void CheckFile()
@@ -56,6 +63,21 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
         return false;
     }
 
+    private bool CheckDuplicates(List<string> list)
+    {
+        HashSet<string> set = new HashSet<string>();
+
+        foreach (string item in list)
+        {
+            if (!set.Add(item))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private bool HasDuplicates(List<FieldData> fieldDataList)
     {
         // Проверка, есть ли хотя бы одна группа с более чем одним элементом (дубликаты)
@@ -84,15 +106,30 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
     public IActionResult OnPost(List<string> values)
     {
         int counter = 0;
-        foreach (var frame in Frames)
+        var arr = new List<string>();
+
+        PageState.FillFrames(values);
+        foreach (var val in values)
         {
             counter++;
-            if (HasDuplicates(frame.FrameContent))
+            arr.Add(val);
+            if (counter % 4 == 0)
             {
-                TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter}.";
-                PageState.Frame = 0;
-                return RedirectToPage();
+                if (CheckDuplicates(arr))
+                {
+                    TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter / 4}.";
+                    PageState.Frame = 0;
+                    return new ViewResult();
+                }
+                arr.Clear();
             }
+
+            //if (HasDuplicates(frame.FrameContent))
+            //{
+            //    TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter}.";
+            //    PageState.Frame = 0;
+            //    return RedirectToPage();
+            //}
             //foreach (var field in frame.FrameContent)
             //{
             //    Fields.Add(new FieldData { FieldName = field.FieldName, Value = values[counter] });
@@ -108,23 +145,18 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
 
         //Log();
 
-        if(Repeats(values, out int ind))
-        {
-            return RedirectToPage();
-        }
+        //if(Repeats(values, out int ind))
+        //{
+        //    return RedirectToPage();
+        //}
 
         TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
+        Frames.Clear();
 
         return RedirectToPage();
     }
 
-    public List<QuestionModel> Questions { get; set; } = new();
-
-    public List<FieldData> QuestionsField { get; set; }
-
-    public List<FrameData> Frames { get; set; }
-
-
+    /*
     private List<string> ListFill()
     {
         string path = questions;
@@ -144,7 +176,6 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
         return lines;
     }
 
-
     private async Task FillFrames()
     {
         var arr = new List<FieldData>();
@@ -163,19 +194,10 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
             }
         }
     }
+    */
 
     public async Task OnGetAsync()
     {
         //await FillNew();
-    }
-
-    public IEnumerator<FieldData> GetEnumerator()
-    {
-        return QuestionsField.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 }

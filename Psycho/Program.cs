@@ -1,6 +1,10 @@
+using Psycho;
+
 var builder = WebApplication.CreateBuilder(args);
 
 YourPageModel.CheckFile();
+
+PageState.FillFrames();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
