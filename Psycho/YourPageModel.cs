@@ -45,9 +45,11 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
         foreach (var frame in Frames)
         {
             index++;
+            PageState.Frame++;
             if (HasDuplicates(frame.FrameContent))
             {
-                TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения";// рамки #{index}.";
+                TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{PageState.Frame}.";
+                PageState.Frame = 0;
                 return true;
             }
         }
@@ -84,11 +86,18 @@ public class YourPageModel : PageModel, IEnumerable<FieldData>
         int counter = 0;
         foreach (var frame in Frames)
         {
-            foreach (var field in frame.FrameContent)
+            counter++;
+            if (HasDuplicates(frame.FrameContent))
             {
-                Fields.Add(new FieldData { FieldName = field.FieldName, Value = values[counter] });
-                counter++;
+                TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter}.";
+                PageState.Frame = 0;
+                return RedirectToPage();
             }
+            //foreach (var field in frame.FrameContent)
+            //{
+            //    Fields.Add(new FieldData { FieldName = field.FieldName, Value = values[counter] });
+            //    counter++;
+            //}
         }
 
         

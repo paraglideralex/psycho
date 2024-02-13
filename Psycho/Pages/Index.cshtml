@@ -172,19 +172,48 @@
         <div class="question-container">
             <div class="question-frame" id="frame@(frameNumber)">
                 <h3>#@(frameNumber++)</h3>
-                @foreach (var question in frame.FrameContent)
-                {
+@*                 @foreach (var question in frame.FrameContent)
+                { *@
                     <div class="question-input">
-                        <label for="field@(frameNumber2++)">@(question.FieldName)</label>
+                        <label for="field@(frameNumber2++)">@(frame.FrameContent[0].FieldName)</label>
                         <select name="values">
-                            <!--<option value="" disabled selected>1</option>-->
-                            <option value="1">1</option>
+                            <option value="1" selected>1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                         </select>
                     </div>
-                }
+                    <div class="question-input">
+                        <label for="field@(frameNumber2++)">@(frame.FrameContent[1].FieldName)</label>
+                        <select name="values">
+                            <!--<option value="" disabled selected>1</option>-->
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <div class="question-input">
+                        <label for="field@(frameNumber2++)">@(frame.FrameContent[2].FieldName)</label>
+                        <select name="values">
+                            <!--<option value="" disabled selected>1</option>-->
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3 </option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <div class="question-input">
+                        <label for="field@(frameNumber2++)">@(frame.FrameContent[3].FieldName)</label>
+                        <select name="values">
+                            <!--<option value="" disabled selected>1</option>-->
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4" selected>4</option>
+                        </select>
+                    </div>
+                @* } *@
             </div>
         </div>
 
