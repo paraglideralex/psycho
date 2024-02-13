@@ -6,7 +6,6 @@ public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
 
-
     public List<QuestionModel> Questions { get; set; }
 
     public IndexModel(ILogger<IndexModel> logger)
@@ -16,21 +15,11 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        //Questions = new List<QuestionModel>
-        //{
-        //    new QuestionModel { QuestionText = "Авантюризм, склонность к риску", AnswerName = "QuestionAnswers[0]" },
-        //    new QuestionModel { QuestionText = "Настороженность, отстраненность", AnswerName = "QuestionAnswers[1]" },
-        //    new QuestionModel { QuestionText = "Адаптивность, конформизм", AnswerName = "QuestionAnswers[2]" },
-        //    new QuestionModel { QuestionText = "Неугомонность, нетерпеливость", AnswerName = "QuestionAnswers[3]" }
-        //    // Добавьте остальные вопросы в список
-        //};
         Questions = new List<QuestionModel>
         {
-
-            // Добавьте остальные вопросы в список
         };
-
     }
+
     [BindProperty]
     public List<string> Fields { get; set; }
     public IActionResult OnPost(List<string> values)

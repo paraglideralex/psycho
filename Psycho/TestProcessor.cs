@@ -2,7 +2,6 @@
 
 public class TestProcessor
 {
-    private List<string> data;
     public TestProcessor(List<string> items)
     {
         FillValues(items);
