@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Diagnostics.Metrics;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -38,7 +40,38 @@ public class YourPageModel : PageModel
         }
     }
 
-    private bool CheckDuplicates(List<string> list)
+    /// <summary>
+    /// Проверяет наличие дубликатов в полях на странице.
+    /// </summary>
+    /// <param name="values"></param>
+    /// <param name="counter"></param>
+    /// <returns></returns>
+    private bool CheckDuplicates(List<string> values, out int counter)
+    {
+        counter = 0;
+        var arr = new List<string>();
+        foreach (var val in values)
+        {
+            counter++;
+            arr.Add(val);
+            if (counter % 4 == 0)
+            {
+                if (HasDuplicates(arr))
+                {
+                    return true;
+                }
+                arr.Clear();
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Проверяет наличие дубликатов в списке.
+    /// </summary>
+    /// <param name="list"></param>
+    /// <returns></returns>
+    private bool HasDuplicates(List<string> list)
     {
         HashSet<string> set = new HashSet<string>();
 
@@ -51,6 +84,18 @@ public class YourPageModel : PageModel
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Реализует поведение при наличии дубликатов.
+    /// </summary>
+    /// <param name="counter"></param>
+    /// <returns></returns>
+    private IActionResult OnDuplicates(int counter)
+    {
+        TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter / 4}.";
+        PageState.Frame = 0;
+        return RedirectToPage();
     }
 
     private void Log(string answer)
@@ -80,30 +125,15 @@ public class YourPageModel : PageModel
 
     public IActionResult OnPost(List<string> values)
     {
-        int counter = 0;
-        var arr = new List<string>();
-
         PageState.Frames.Clear();
         PageState.FillFrames(values);
         PageState.FirstName = FirstName;
         PageState.LastName = LastName;
         PageState.MiddleName = MiddleName;
 
-        foreach (var val in values)
+        if(CheckDuplicates(values, out int counter))
         {
-            counter++;
-            arr.Add(val);
-            if (counter % 4 == 0)
-            {
-                if (CheckDuplicates(arr))
-                {
-                    TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter / 4}.";
-                    PageState.Frame = 0;
-                    return RedirectToPage();
-                    
-                }
-                arr.Clear();
-            }
+            return OnDuplicates(counter);
         }
 
         var process = new TestProcessor(values);
