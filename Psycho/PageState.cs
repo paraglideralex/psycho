@@ -35,6 +35,7 @@ public static class PageState
 
     public static async Task FillFrames()
     {
+        Frames.Clear();
         var arr = new List<FieldData>();
         var lines = ListFill();
         int count = 0;

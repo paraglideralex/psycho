@@ -116,6 +116,23 @@ public class YourPageModel : PageModel
         writer.WriteLine();
     }
 
+    private void UpdateHistory(List<string> values)
+    {
+        PageState.Frames.Clear();
+        PageState.FillFrames(values);
+        PageState.FirstName = FirstName;
+        PageState.LastName = LastName;
+        PageState.MiddleName = MiddleName;
+    }
+
+    private void CleanHistory()
+    {
+        PageState.FillFrames();
+        PageState.FirstName = "";
+        PageState.LastName = "";
+        PageState.MiddleName = "";
+    }
+
     public YourPageModel()
     {
         QuestionsField = new();
@@ -125,11 +142,7 @@ public class YourPageModel : PageModel
 
     public IActionResult OnPost(List<string> values)
     {
-        PageState.Frames.Clear();
-        PageState.FillFrames(values);
-        PageState.FirstName = FirstName;
-        PageState.LastName = LastName;
-        PageState.MiddleName = MiddleName;
+        UpdateHistory(values);
 
         if(CheckDuplicates(values, out int counter))
         {
@@ -143,6 +156,8 @@ public class YourPageModel : PageModel
 
         TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
         Frames.Clear();
+
+        CleanHistory();
         
         return RedirectToPage();
     }
