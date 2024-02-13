@@ -1,10 +1,17 @@
-﻿namespace Psycho;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Psycho;
 
 public static class PageState
 {
     public static int Frame = 0;
     private static string questions = "wwwroot/names.txt";
 
+    public static string FirstName { get; set; }
+
+    public static string LastName { get; set; }
+
+    public static string MiddleName { get; set; }
     public static List<FrameData> Frames { get; set; } = new List<FrameData>();
 
     private static List<string> ListFill()
@@ -48,10 +55,11 @@ public static class PageState
     public static async Task FillFrames(List<string> values)
     {
         var arr = new List<FieldData>();
+        var lines = ListFill();
         int count = 0;
-        foreach (string line in values)
+        foreach (string line in lines)
         {
-            arr.Add(new FieldData { FieldName = line, Value = (count % 4 + 1).ToString() });
+            arr.Add(new FieldData { FieldName = line, Value = values[count].ToString() });
             count++;
             if (count % 4 == 0)
             {
@@ -62,4 +70,6 @@ public static class PageState
             }
         }
     }
+
+
 }

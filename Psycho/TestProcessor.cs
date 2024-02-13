@@ -3,11 +3,48 @@
 public class TestProcessor
 {
     private List<string> data;
-    public TestProcessor(List<string> values) => data = values;
-
-    private int Compute(List<int> content)
+    public TestProcessor(List<string> items)
     {
-        return content.Sum();
+        FillValues(items);
+    }
+
+    private List<List<int>> values = new();
+
+    private void FillValues(List<string> items)
+    {
+        var arr = new List<int>();
+        int count = 0;
+        foreach (string line in items)
+        {
+            arr.Add(Convert.ToInt32(line));
+            count++;
+            if (count % 4 == 0)
+            {
+                var list = new List<int>(arr);
+                values.Add(list);
+
+                arr.Clear();
+            }
+        }
+    }
+
+    private int Compute()
+    {
+        int first = 0;
+        int second = 0;
+        int third = 0;
+        int forth = 0;
+        foreach (var i in values)
+        {
+            first += i[0];
+            second += i[1];
+            third += i[2];
+            forth += i[3];
+        }
+
+        var list = new List<int>() { first, second, third, forth};
+        int ans = list.Max();
+        return ans;
     }
 
     private string Classify(int number)
@@ -33,13 +70,7 @@ public class TestProcessor
     }
     public string Process()
     {
-        List<int> values = new ();
-        foreach (var i in data)
-        {
-            values.Add(int.Parse (i));
-        }
-
-        int value = Compute (values);
+        int value = Compute();
         string ans = Classify(value);
 
         return ans;

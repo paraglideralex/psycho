@@ -55,6 +55,8 @@ public class YourPageModel : PageModel
             PageState.Frame++;
             if (HasDuplicates(frame.FrameContent))
             {
+                PageState.FirstName = FirstName; PageState.LastName = LastName; PageState.MiddleName = MiddleName;
+
                 TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{PageState.Frame}.";
                 PageState.Frame = 0;
                 return true;
@@ -107,8 +109,9 @@ public class YourPageModel : PageModel
     {
         int counter = 0;
         var arr = new List<string>();
-
+        PageState.Frames.Clear();
         PageState.FillFrames(values);
+        PageState.FirstName = FirstName; PageState.LastName = LastName; PageState.MiddleName = MiddleName;
         foreach (var val in values)
         {
             counter++;
@@ -119,7 +122,9 @@ public class YourPageModel : PageModel
                 {
                     TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter / 4}.";
                     PageState.Frame = 0;
-                    return new ViewResult();
+                    //PageState.Frames.Clear();
+                    return RedirectToPage();
+                    
                 }
                 arr.Clear();
             }
@@ -152,6 +157,7 @@ public class YourPageModel : PageModel
 
         TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
         Frames.Clear();
+        
 
         return RedirectToPage();
     }

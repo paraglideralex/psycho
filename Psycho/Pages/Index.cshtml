@@ -121,20 +121,28 @@
             background-color: #ddd; /* Изменение цвета фона при наведении */
         }
 
+    p {
+        width: 60%;
+        margin: 0 auto;
+    }
+
 </style>
 
 
-<h1>Психологический тест</h1>
+<h1>Психологический тест <br />ЦИФРОВОЙ ДВОЙНИК ЧЕЛОВЕКА</h1>
 
 <p>
     Данный тест позволяет определить ваше командное амплуа, то есть способ, которым вы реализуете свои таланты.<br /><br />
     Вас ждет 24 набора позитивных качеств, которые необходимо проранжировать от 1 до 4, чтобы определить ваш уникальный стиль.<br />
     1 – «наиболее мне соответствует», 4 – «наименее мне соответствует».<br /><br />
     Тест займет около 10 минут. Результаты будут отправлены на указанную вами почту.<br /><br />
-    Проранжируйте качества от 1 до 4, где 1 – «наиболее мне соответствует», а 4 – «наименее мне соответствует».
+    В каждом из наборов проранжируйте качества от 1 до 4, где 1 – «наиболее мне соответствует», а 4 – «наименее мне соответствует». <br /><br />
+    Значения в одном наборе <b>не могут повторяться.</b><br /><br />
 </p>
 
 <p><b>Обязательно введите фамилию, имя и отчество.</b></p>
+<br />
+<br />
 
 @{
     int frameNumber = 1; // начальное значение номера рамки
@@ -148,49 +156,49 @@
     var arr = new List<string>();
 }
 
+<form method="post">
 <div class="text-center">
     <div class="put">
         <h5 for="firstName">Фамилия:</h5>
-            <input type="text" id="lastName" name="LastName" required />
+            <input type="text" id="lastName" name="LastName" value="@(PageState.LastName)" required />
     </div>
 
         <div class="put">
         <h5 for="lastName">Имя:</h5>
-        <input type="text" id="firstName" name="FirstName" required />
+            <input type="text" id="firstName" name="FirstName" value="@(PageState.FirstName)" required />
     </div>
 
         <div class="put">
         <h5 for="middleName">Отчество:</h5>
-        <input type="text" id="middleName" name="MiddleName" required />
+            <input type="text" id="middleName" name="MiddleName" value="@(PageState.MiddleName)" required />
     </div>
 
 
     @foreach (var frame in Model.Frames)
-    //@for (int i = 0; i < Model.FieldNamesList.Count; i++)
     {
         <div class="question-container">
             <div class="question-frame" id="frame@(frameNumber)">
                 <h3>#@(frameNumber++)</h3>
-@*                 @foreach (var question in frame.FrameContent)
-                { *@
+                    @for (int i = 0; i<frame.FrameContent.Count;i++)// var question in frame.FrameContent)
+                    {
                     <div class="question-input">
-                        <label for="field@(frameNumber2++)">@(frame.FrameContent[0].FieldName)</label>
+                        <label for="field@(frameNumber2++)">@(frame.FrameContent[i].FieldName)</label>
                         <select name="values">
-                        @if (frame.FrameContent[0].Value == "1")
+                        @if (frame.FrameContent[i].Value == "1")
                         {
                             <option value="1" selected>1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                         }
-                        else if (frame.FrameContent[0].Value == "2")
+                        else if (frame.FrameContent[i].Value == "2")
                         {
                             <option value="1">1</option>
                             <option value="2" selected>2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                         }
-                        else if (frame.FrameContent[0].Value == "3")
+                        else if (frame.FrameContent[i].Value == "3")
                         {
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -206,117 +214,18 @@
                         }
                         </select>
                     </div>
-                    <div class="question-input">
-                        <label for="field@(frameNumber2++)">@(frame.FrameContent[1].FieldName)</label>
-                        <select name="values">
-                        @if (frame.FrameContent[1].Value == "1")
-                        {
-                            <option value="1" selected>1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        }
-                        else if (frame.FrameContent[1].Value == "2")
-                        {
-                            <option value="1">1</option>
-                            <option value="2" selected>2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        }
-                        else if (frame.FrameContent[1].Value == "3")
-                        {
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3" selected>3 </option>
-                            <option value="4">4</option>
-                        }
-                        else
-                        {
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4" selected>4</option>
-                        }
-                        </select>
-                    </div>
-                    <div class="question-input">
-                        <label for="field@(frameNumber2++)">@(frame.FrameContent[2].FieldName)</label>
-                        <select name="values">
-                        @if (frame.FrameContent[2].Value == "1")
-                        {
-                            <option value="1" selected>1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        }
-                        else if (frame.FrameContent[2].Value == "2")
-                        {
-                            <option value="1">1</option>
-                            <option value="2" selected>2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        }
-                        else if (frame.FrameContent[2].Value == "3")
-                        {
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3" selected>3 </option>
-                            <option value="4">4</option>
-                        }
-                        else
-                        {
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4" selected>4</option>
-                        }
-                        </select>
-                    </div>
-                    <div class="question-input">
-                        <label for="field@(frameNumber2++)">@(frame.FrameContent[3].FieldName)</label>
-                        <select name="values">
-                        @if (frame.FrameContent[3].Value == "1")
-                        {
-                            <option value="1" selected>1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        }
-                        else if (frame.FrameContent[3].Value == "2")
-                        {
-                            <option value="1">1</option>
-                            <option value="2" selected>2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        }
-                        else if (frame.FrameContent[3].Value == "3")
-                        {
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3" selected>3 </option>
-                            <option value="4">4</option>
-                        }
-                        else
-                        {
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4" selected>4</option>
-                        }
-                        </select>
-                    </div>
-                @* } *@
+                 }
             </div>
         </div>
 
     }
        <div>
-            <button type="submit" onclick="checkAndSubmit(event)">Отправить данные</button>
+            <button class ="custom-button" type="submit" onclick="checkAndSubmit(event)">Отправить данные</button>
         </div>
 
 
 </div>
-
+</form>
 
 <!-- Модальное окно Bootstrap -->
 <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
