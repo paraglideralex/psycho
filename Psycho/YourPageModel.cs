@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Diagnostics.Metrics;
+using System.Text;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
 using Psycho;
 
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class YourPageModel : PageModel
 {
     private static string logFile = "answer.csv";
-    private string questions = "wwwroot/names.txt";
 
     public List<QuestionModel> Questions { get; set; } = new();
 
@@ -27,8 +27,6 @@ public class YourPageModel : PageModel
     [BindProperty]
     public string MiddleName { get; set; }
 
-    [BindProperty]
-    public List<FieldData> Fields { get; set; } = new();
 
     public static void CheckFile()
     {
@@ -98,22 +96,23 @@ public class YourPageModel : PageModel
         return RedirectToPage();
     }
 
-    private void Log(string answer)
+    private string Report(string answer)
     {
-        using var writer = new System.IO.StreamWriter(logFile, true, System.Text.Encoding.UTF8);
-        writer.WriteLine($"Фамилия;{LastName}");
-        writer.WriteLine($"Имя;{FirstName}");
-        writer.WriteLine($"Отчество;{MiddleName}");
+        string ans = "";
+        ans += $"Фамилия;{LastName}\r\nИмя;{FirstName}\r\nОтчество;{MiddleName}\r\n";
 
-        var fiel = Fields.Select(f => $"{f.FieldName};{f.Value}");
+        
 
-        foreach (var st in fiel)
+        foreach (var frame in PageState.Frames)
         {
-            writer.WriteLine(st);
+            foreach (var field in frame.FrameContent)
+            {
+                ans += $"{field.FieldName};{field.Value}\r\n";
+            }
+            
         }
-        writer.WriteLine();
-        writer.WriteLine($"Ваш подтип;{answer}");
-        writer.WriteLine();
+        ans += $"Ваш подтип;{answer}\r\n";
+        return ans;
     }
 
     private void UpdateHistory(List<string> values)
@@ -140,6 +139,8 @@ public class YourPageModel : PageModel
         Frames.AddRange(PageState.Frames);
     }
 
+
+    [HttpPost]
     public IActionResult OnPost(List<string> values)
     {
         UpdateHistory(values);
@@ -152,14 +153,18 @@ public class YourPageModel : PageModel
         var process = new TestProcessor(values);
         var answer = process.Process();
 
-        //Log();
-
         TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
+
+        string csvContent = answer;
+
+        byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent);
+
+        TempData["file"] = Report(answer);
         Frames.Clear();
 
         CleanHistory();
-        
-        return RedirectToPage();
+
+        return RedirectToPage("result/");
     }
 
     public async Task OnGetAsync()

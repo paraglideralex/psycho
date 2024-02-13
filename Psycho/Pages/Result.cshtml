@@ -1,0 +1,19 @@
+﻿@page "result/"
+@model Psycho.Pages.FileNameModel
+@{
+}
+
+
+<p>@TempData["SuccessMessage"]</p>
+
+<br />
+
+<form method="post">
+    <div>
+        <button class="custom-button" type="submit" onclick="SaveResultsCsv">Скачать файл с результатом</button>
+    </div>
+</form>
+
+<br />
+<a href="../">Назад</a>
+

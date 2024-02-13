@@ -45,6 +45,12 @@
             }
         });
     </script>
+
+    <script>
+        $.fileDownload(url)
+            .done(function () {
+                window.location = '/redirectPage';
+            });</script>
 }
 
 
@@ -133,8 +139,7 @@
 
 <p>
     Данный тест позволяет определить ваше командное амплуа, то есть способ, которым вы реализуете свои таланты.<br /><br />
-    Вас ждет 24 набора позитивных качеств, которые необходимо проранжировать от 1 до 4, чтобы определить ваш уникальный стиль.<br />
-    1 – «наиболее мне соответствует», 4 – «наименее мне соответствует».<br /><br />
+    Вас ждет 24 набора позитивных качеств, определяющих ваш уникальный стиль.<br /><br />
     В каждом из наборов проранжируйте качества от 1 до 4, где 1 – «наиболее мне соответствует», а 4 – «наименее мне соответствует».
     Значения в одном наборе <b>не могут повторяться.</b><br /><br />
     Тест займет около 10 минут. Результаты будут отправлены на указанную вами почту.<br /><br />
@@ -172,7 +177,13 @@
         <h5 for="middleName">Отчество:</h5>
             <input type="text" id="middleName" name="MiddleName" value="@(PageState.MiddleName)" required />
     </div>
+        <br />
+        <br />
 
+        <div>
+            <button class="custom-button" type="submit" onclick="Download">Отправить данные</button>
+        </div>
+        <br />
 
     @foreach (var frame in Model.Frames)
     {
@@ -219,9 +230,7 @@
         </div>
 
     }
-       <div>
-            <button class ="custom-button" type="submit" onclick="checkAndSubmit(event)">Отправить данные</button>
-        </div>
+
 
 
 </div>
