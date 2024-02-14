@@ -7,6 +7,8 @@ namespace Psycho.Pages
 {
     public class FileNameModel : PageModel
     {
+        public FileNameModel() { }
+
         public void OnGet()
         {
         }
