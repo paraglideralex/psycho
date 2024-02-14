@@ -168,7 +168,7 @@ public class YourPageModel : PageModel
 
         CleanHistory();
 
-        return RedirectToPage("result/");
+        return RedirectToPage("Privacy");
     }
 
     public async Task OnGetAsync()

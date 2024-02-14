@@ -1,8 +1,14 @@
 ﻿@page
 @model PrivacyModel
-@{
-    ViewData["Title"] = "Политика конфиденциальности";
-}
-<h1>@ViewData["Title"]</h1>
+<p>@TempData["SuccessMessage"]</p>
 
-<p>Тут будет описание политики конфиденциальности</p>
+<br />
+
+<form method="post">
+    <div>
+        <button class="custom-button" type="submit" onclick="SaveResultsCsv">Скачать файл с результатом</button>
+    </div>
+</form>
+
+<br />
+<a href="../">Назад</a>
