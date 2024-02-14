@@ -159,7 +159,11 @@ public class YourPageModel : PageModel
 
         byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent);
 
-        TempData["file"] = Report(answer);
+
+        //TempData["file"] = Report(answer);
+
+        PageState.Result = Report(answer);
+
         Frames.Clear();
 
         CleanHistory();

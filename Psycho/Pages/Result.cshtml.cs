@@ -14,7 +14,7 @@ namespace Psycho.Pages
         public IActionResult OnPost()
         {
             // получаем данные из TempData
-            string fil = TempData["file"] as string;
+            string fil = PageState.Result as string;
             byte[] fileData = Encoding.UTF8.GetBytes(fil);// TempData["file"] as byte[];
 
             string fileName = "results.csv";
