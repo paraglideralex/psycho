@@ -20,9 +20,9 @@ public class PrivacyModel : PageModel
         string fil = PageState.Result;
         byte[] fileData = Encoding.UTF8.GetBytes(fil);// TempData["file"] as byte[];
 
-        string fileName = "results.csv";
+        string fileName = "results.txt";
 
-        return File(fileData, "text/csv", fileName);
+        return File(fileData, "text/txt", fileName);
     }
 }
 
