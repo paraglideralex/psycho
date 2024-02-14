@@ -14,7 +14,7 @@ public static class PageState
     public static string MiddleName { get; set; }
     public static List<FrameData> Frames { get; set; } = new List<FrameData>();
 
-    public static string Result = "";
+    public static string Result { get; set; } = "";
 
     private static List<string> ListFill()
     {
