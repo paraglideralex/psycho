@@ -14,7 +14,88 @@
     }
 </script>
 
+
+
 @section scripts {
+
+    <script>
+        const frames = document.querySelectorAll('.question-frame');
+        let hasDuplicates = false;
+
+
+        const submitButton = document.querySelector('.custom-button'); 
+
+
+
+        frames.forEach(frame => {
+
+          const selects = frame.querySelectorAll('select');
+  
+          selects.forEach(select => {
+
+            select.addEventListener('change', () => {
+
+              const values = [];
+
+              selects.forEach(s => {
+                values.push(s.value); 
+              });
+      
+              const uniqueValues = new Set(values);
+
+              if (uniqueValues.size !== values.length) {
+                frame.style.border = '2px solid red';
+                showError();
+                hasDuplicates = true;
+              } else {
+                frame.style.border = '';
+                hideError();
+                hasDuplicates = false;
+              }
+
+            });
+
+          });
+
+        });
+
+// Получаем элемент для вывода сообщения
+const errorMessage = document.getElementById('error-message');
+
+// Функции показа/скрытия  
+function showError() {
+  errorMessage.style.display = 'block'; 
+}
+
+function hideError() {
+  errorMessage.style.display = 'none';
+}
+
+
+        // Обработчики кнопки  
+submitButton.addEventListener('click', e => {
+  if (uniqueValues.size !== values.length) {
+    e.preventDefault();
+  } 
+});
+
+if (hasDuplicates) {
+  submitButton.disabled = true;
+} else {
+  submitButton.disabled = false;
+}
+
+
+</script>
+
+    <script>
+        $(document).ready(function () {
+            $('select[name^="Questions["]').prepend('<option value="" disabled selected>Select an option</option>');
+        });
+    </script>
+
+
+
     <script>
         $(document).ready(function () {
             $('select[name^="Questions["]').prepend('<option value="" disabled selected>Select an option</option>');
@@ -51,6 +132,22 @@
             .done(function () {
                 window.location = '/redirectPage';
             });</script>
+
+            <script>
+                const button = document.querySelector('.custom-button');
+
+                button.addEventListener('click', e => {
+                  if (hasDuplicates) {
+                    e.preventDefault();
+                    document.querySelector('.error-text').style.display = 'block';
+                  } 
+                })
+            </script>
+
+            <script>
+
+
+            </script>
 }
 
 
@@ -184,6 +281,10 @@
             <button class="custom-button" type="submit" onclick="Download">Отправить данные</button>
         </div>
         <br />
+
+<div id="error-message" style="display: none">
+  Пожалуйста, исправьте ошибки в полях
+</div>
 
     @foreach (var frame in Model.Frames)
     {

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Psycho;
 
+using SampleApp.Data;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class YourPageModel : PageModel
@@ -132,10 +134,14 @@ public class YourPageModel : PageModel
         PageState.MiddleName = "";
     }
 
+    private readonly AppDbContext db;
+
     public YourPageModel()
     {
         QuestionsField = new();
         Frames = new();
+        //this.db = db;
+        //Frames.AddRange(db.Fra);
         Frames.AddRange(PageState.Frames);
     }
 
