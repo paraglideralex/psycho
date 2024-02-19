@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Psycho;
 
-using SampleApp.Data;
-
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class YourPageModel : PageModel
 {
     private static string logFile = "answer.csv";
 
+    private static string questions = "wwwroot/names.txt";
+
     public List<QuestionModel> Questions { get; set; } = new();
 
     public List<FieldData> QuestionsField { get; set; }
 
-    public List<FrameData> Frames { get; set; }
+    public List<FrameData> Frames { get; set; } = new();
 
     [BindProperty]
     public string FirstName { get; set; }
@@ -39,7 +39,7 @@ public class YourPageModel : PageModel
             System.IO.File.Delete(logFile);
         }
     }
-
+    /*
     /// <summary>
     /// Проверяет наличие дубликатов в полях на странице.
     /// </summary>
@@ -85,7 +85,8 @@ public class YourPageModel : PageModel
 
         return false;
     }
-
+    */
+    /*
     /// <summary>
     /// Реализует поведение при наличии дубликатов.
     /// </summary>
@@ -97,15 +98,14 @@ public class YourPageModel : PageModel
         PageState.Frame = 0;
         return RedirectToPage();
     }
+    */
 
     private string Report(string answer)
     {
         string ans = "";
         ans += $"Фамилия;{LastName}\r\nИмя;{FirstName}\r\nОтчество;{MiddleName}\r\n";
 
-        
-
-        foreach (var frame in PageState.Frames)
+        foreach (var frame in Frames)
         {
             foreach (var field in frame.FrameContent)
             {
@@ -117,6 +117,7 @@ public class YourPageModel : PageModel
         return ans;
     }
 
+    /*
     private void UpdateHistory(List<string> values)
     {
         PageState.Frames.Clear();
@@ -135,46 +136,119 @@ public class YourPageModel : PageModel
     }
 
     private readonly AppDbContext db;
+    */
 
+    private static List<string> ListFill()
+    {
+        string path = questions;
+        List<string> lines = new List<string>();
+
+
+        // Используем StreamReader для чтения файла построчно
+        using (StreamReader reader = new StreamReader(path))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                lines.Add(line);
+            }
+        }
+
+        return lines;
+    }
+
+    public async Task FillFrames()
+    {
+        Frames.Clear();
+        var arr = new List<FieldData>();
+        var lines = ListFill();
+        int count = 0;
+        foreach (string line in lines)
+        {
+            arr.Add(new FieldData { FieldName = line, Value = (count % 4 + 1).ToString() });
+            count++;
+            if (count % 4 == 0)
+            {
+                List<FieldData> copiedList = new List<FieldData>(arr);
+                Frames.Add(new FrameData(copiedList));
+
+                arr.Clear();
+            }
+        }
+    }
+
+    public async Task FillFrames(List<string> values)
+    {
+        var arr = new List<FieldData>();
+        var lines = ListFill();
+        int count = 0;
+        foreach (string line in lines)
+        {
+            arr.Add(new FieldData { FieldName = line, Value = values[count].ToString() });
+            count++;
+            if (count % 4 == 0)
+            {
+                List<FieldData> copiedList = new List<FieldData>(arr);
+                Frames.Add(new FrameData(copiedList));
+
+                arr.Clear();
+            }
+        }
+    }
     public YourPageModel()
     {
         QuestionsField = new();
-        Frames = new();
+        FillFrames();
         //this.db = db;
         //Frames.AddRange(db.Fra);
-        Frames.AddRange(PageState.Frames);
+        //Frames.AddRange(PageState.Frames);
+    }
+
+    public byte[] CreateBinary(string answer)
+    {
+        // получаем данные из TempData
+        string fil = Report(answer);
+        //string fil = PageState.Result;
+        byte[] fileData = Encoding.UTF8.GetBytes(fil);// TempData["file"] as byte[];
+        return fileData;
+
+        //string fileName = "results.txt";
+
+        //return File(fileData, "text/txt", fileName);
     }
 
 
     [HttpPost]
     public IActionResult OnPost(List<string> values)
     {
-        UpdateHistory(values);
+        //UpdateHistory(values);
 
-        if(CheckDuplicates(values, out int counter))
-        {
-            return OnDuplicates(counter);
-        }
+        //if(CheckDuplicates(values, out int counter))
+        //{
+        //    return OnDuplicates(counter);
+        //}
+        Frames.Clear();
+        FillFrames(values);
 
         var process = new TestProcessor(values);
         var answer = process.Process();
 
-        TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
+        //TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
 
-        string csvContent = answer;
-
-        byte[] fileBytes = Encoding.UTF8.GetBytes(csvContent);
+        
 
 
         //TempData["file"] = Report(answer);
 
-        PageState.Result = Report(answer);
+        //PageState.Result = Report(answer);
 
-        Frames.Clear();
+        //Frames.Clear();
 
-        CleanHistory();
+        //CleanHistory();
 
-        return RedirectToPage("Privacy");
+        //return RedirectToPage();
+
+        return File(CreateBinary(answer), "text/txt", "results.txt");
     }
 
     public async Task OnGetAsync()

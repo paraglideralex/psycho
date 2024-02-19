@@ -22,10 +22,7 @@
         const frames = document.querySelectorAll('.question-frame');
         let hasDuplicates = false;
 
-
         const submitButton = document.querySelector('.custom-button'); 
-
-
 
         frames.forEach(frame => {
 
@@ -71,19 +68,20 @@ function hideError() {
   errorMessage.style.display = 'none';
 }
 
+        var button = document.querySelector(".custom-button");
 
-        // Обработчики кнопки  
-submitButton.addEventListener('click', e => {
-  if (uniqueValues.size !== values.length) {
-    e.preventDefault();
-  } 
-});
 
-if (hasDuplicates) {
-  submitButton.disabled = true;
-} else {
-  submitButton.disabled = false;
-}
+        button.addEventListener('click', function (event) {
+            if (hasDuplicates) { // Укажите здесь ваше условие
+                event.preventDefault();
+                //button.setAttribute("disabled", "true");
+                alert('Сначала исправьте ошибки в полях! Цифры не должны повторяться');
+            } else {
+                // Здесь можно добавить код для отправки POST запроса
+                alert('Ответ успешно отправлен!');
+                //button.setAttribute("disabled", "false");
+            }
+        });
 
 
 </script>
@@ -127,27 +125,6 @@ if (hasDuplicates) {
         });
     </script>
 
-    <script>
-        $.fileDownload(url)
-            .done(function () {
-                window.location = '/redirectPage';
-            });</script>
-
-            <script>
-                const button = document.querySelector('.custom-button');
-
-                button.addEventListener('click', e => {
-                  if (hasDuplicates) {
-                    e.preventDefault();
-                    document.querySelector('.error-text').style.display = 'block';
-                  } 
-                })
-            </script>
-
-            <script>
-
-
-            </script>
 }
 
 
@@ -220,9 +197,9 @@ if (hasDuplicates) {
         cursor: pointer; /* Индикация указателя при наведении */
     }
 
-        .custom-button:hover {
-            background-color: #ddd; /* Изменение цвета фона при наведении */
-        }
+    .custom-button:hover {
+        background-color: #ddd; /* Изменение цвета фона при наведении */
+    }
 
     p {
         width: 60%;
@@ -262,17 +239,17 @@ if (hasDuplicates) {
 <div class="text-center">
     <div class="put">
         <h5 for="firstName">Фамилия:</h5>
-            <input type="text" id="lastName" name="LastName" value="@(PageState.LastName)" required />
+            <input type="text" id="lastName" name="LastName"  required />
     </div>
 
         <div class="put">
         <h5 for="lastName">Имя:</h5>
-            <input type="text" id="firstName" name="FirstName" value="@(PageState.FirstName)" required />
+            <input type="text" id="firstName" name="FirstName"  required />
     </div>
 
         <div class="put">
         <h5 for="middleName">Отчество:</h5>
-            <input type="text" id="middleName" name="MiddleName" value="@(PageState.MiddleName)" required />
+            <input type="text" id="middleName" name="MiddleName"  required />
     </div>
         <br />
         <br />
@@ -283,7 +260,7 @@ if (hasDuplicates) {
         <br />
 
 <div id="error-message" style="display: none">
-  Пожалуйста, исправьте ошибки в полях
+  Пожалуйста, исправьте ошибки в полях - цифры не должны повторяться!
 </div>
 
     @foreach (var frame in Model.Frames)
