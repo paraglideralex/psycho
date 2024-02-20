@@ -49,6 +49,17 @@ function hideError() {
 
 var button = document.querySelector(".custom-button");
 
+function checkFields() {
+    let lastName = document.getElementById('lastName').value;
+    let firstName = document.getElementById('firstName').value;
+    let middleName = document.getElementById('middleName').value;
+
+    if (lastName.trim() !== '' && firstName.trim() !== '' && middleName.trim() !== '') {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 button.addEventListener('click', function (event) {
     if (hasDuplicates) { // Укажите здесь ваше условие
@@ -60,12 +71,15 @@ button.addEventListener('click', function (event) {
             text: 'Сначала исправьте ошибки в полях! Цифры не должны повторяться'
         });
     } else {
-        // Здесь можно добавить код для отправки POST запроса
-        Swal.fire({
-            icon: 'success',
-            title: 'Успешно!',
-            text: 'Тест успешно пройден, ответ отправлен!'
-        });
-        //button.setAttribute("disabled", "false");
+        if (checkFields()) {
+            // Здесь можно добавить код для отправки POST запроса
+            Swal.fire({
+                icon: 'success',
+                title: 'Успешно!',
+                text: 'Тест успешно пройден, ответ отправлен!'
+            });
+            //button.setAttribute("disabled", "false");
+        }
+
     }
 });
