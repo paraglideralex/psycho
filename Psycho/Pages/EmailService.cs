@@ -1,6 +1,8 @@
 ﻿using MimeKit;
 using MailKit.Net.Smtp;
 using System.Threading.Tasks;
+using System.Net.Mail;
+
 namespace SocialApp.Services
 {
     public class EmailService
@@ -12,13 +14,16 @@ namespace SocialApp.Services
             emailMessage.From.Add(new MailboxAddress("Администрация сайта", "trialectica@mail.ru"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-            {
-                Text = message
-            };
 
 
-            using (var client = new SmtpClient())
+
+            var builder = new BodyBuilder();
+            builder.TextBody = message;
+            builder.Attachments.Add("results.txt");
+
+            emailMessage.Body = builder.ToMessageBody();
+
+            using (var client = new MailKit.Net.Smtp.SmtpClient())
             {
                 await client.ConnectAsync("smtp.mail.ru", 465, true);
                 await client.AuthenticateAsync("trialectica@mail.ru", "TMnMdmWtgg4kmMtvSmHU");

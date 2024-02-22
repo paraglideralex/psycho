@@ -41,66 +41,6 @@ public class YourPageModel : PageModel
             System.IO.File.Delete(logFile);
         }
     }
-    /*
-    /// <summary>
-    /// Проверяет наличие дубликатов в полях на странице.
-    /// </summary>
-    /// <param name="values"></param>
-    /// <param name="counter"></param>
-    /// <returns></returns>
-    private bool CheckDuplicates(List<string> values, out int counter)
-    {
-        counter = 0;
-        var arr = new List<string>();
-        foreach (var val in values)
-        {
-            counter++;
-            arr.Add(val);
-            if (counter % 4 == 0)
-            {
-                if (HasDuplicates(arr))
-                {
-                    return true;
-                }
-                arr.Clear();
-            }
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Проверяет наличие дубликатов в списке.
-    /// </summary>
-    /// <param name="list"></param>
-    /// <returns></returns>
-    private bool HasDuplicates(List<string> list)
-    {
-        HashSet<string> set = new HashSet<string>();
-
-        foreach (string item in list)
-        {
-            if (!set.Add(item))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    */
-    /*
-    /// <summary>
-    /// Реализует поведение при наличии дубликатов.
-    /// </summary>
-    /// <param name="counter"></param>
-    /// <returns></returns>
-    private IActionResult OnDuplicates(int counter)
-    {
-        TempData["SuccessMessage"] = $"Исправьте повторяющиеся значения рамки #{counter / 4}.";
-        PageState.Frame = 0;
-        return RedirectToPage();
-    }
-    */
 
     private string Report(string answer)
     {
@@ -134,27 +74,6 @@ public class YourPageModel : PageModel
         string answer = $"{DateTime.Now}\r\n{LastName} {FirstName} {MiddleName}\r\n{string.Join('\t', list)}";
         return answer;
     }
-
-    /*
-    private void UpdateHistory(List<string> values)
-    {
-        PageState.Frames.Clear();
-        PageState.FillFrames(values);
-        PageState.FirstName = FirstName;
-        PageState.LastName = LastName;
-        PageState.MiddleName = MiddleName;
-    }
-
-    private void CleanHistory()
-    {
-        PageState.FillFrames();
-        PageState.FirstName = "";
-        PageState.LastName = "";
-        PageState.MiddleName = "";
-    }
-
-    private readonly AppDbContext db;
-    */
 
     private static List<string> ListFill()
     {
@@ -217,9 +136,6 @@ public class YourPageModel : PageModel
     {
         QuestionsField = new();
         FillFrames();
-        //this.db = db;
-        //Frames.AddRange(db.Fra);
-        //Frames.AddRange(PageState.Frames);
     }
 
     public byte[] CreateBinary(string answer)
@@ -232,10 +148,10 @@ public class YourPageModel : PageModel
         return fileData;
     }
 
-    public async Task<IActionResult> SendMessage()
+    public async Task<IActionResult> SendMessage(string emailTo)
     {
         EmailService emailService = new EmailService();
-        await emailService.SendEmailAsync("alexvt1997@mail.ru", "Тема письма", "Тест письма: тест!");
+        await emailService.SendEmailAsync(emailTo, "Ответы на психологический тест", "Ответы находятся в файле results.txt");
         return RedirectToPage();
     }
 
@@ -264,9 +180,14 @@ public class YourPageModel : PageModel
         //PageState.Result = Report(answer);
 
         //Frames.Clear();
+        using var writer = new StreamWriter("results.txt");
+        {
+            writer.Write(ReportExcel());
+            writer.Close();
+        }
 
         //CleanHistory();
-        await SendMessage();
+        await SendMessage("paraglideralex@yandex.ru");
         //return RedirectToPage();
         //return SendMessage();
         return File(CreateBinary(answer), "text/txt", "results.txt");
