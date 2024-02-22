@@ -20,7 +20,7 @@ frames.forEach(frame => {
             const uniqueValues = new Set(values);
 
             if (uniqueValues.size !== values.length) {
-                frame.style.border = '2px solid red';
+                frame.style.border = '2px solid #F19393';
                 showError();
                 hasDuplicates = true;
             } else {
@@ -68,7 +68,7 @@ button.addEventListener('click', function (event) {
         Swal.fire({
             icon: 'error',
             title: 'Ошибка!',
-            text: 'Сначала исправьте ошибки в полях! Цифры не должны повторяться'
+            text: 'Сначала исправьте ошибки в полях! Цифры не должны повторяться.'
         });
     } else {
         if (checkFields()) {

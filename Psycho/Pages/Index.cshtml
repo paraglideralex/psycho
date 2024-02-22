@@ -1,20 +1,8 @@
 ﻿@page
 @model YourPageModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Тестирование";
 }
-
-
-<script>
-    function changeColor(selectElement) {
-        //var currentBackgroundColor = window.getComputedStyle(selectElement).backgroundColor;
-        //selectElement.style.backgroundColor = '#dcffba'; /* светло-зелёный цвет */
-        //selectElement.style.border = '1px solid gray'; /* Тонкая граница светло-зелёного цвета */
-        //selectElement.style.borderRadius = '3px'; /* Скруглённые края */
-
-    }
-</script>
-
 
 
 @section scripts {
@@ -22,44 +10,6 @@
     <script src="~/js/index.js"></script>
     <script src="~/js/sweetalert2.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('select[name^="Questions["]').prepend('<option value="" disabled selected>Select an option</option>');
-        });
-    </script>
-
-
-
-    <script>
-        $(document).ready(function () {
-            $('select[name^="Questions["]').prepend('<option value="" disabled selected>Select an option</option>');
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            var successMessage = '@TempData["SuccessMessage"]';
-            if (successMessage) {
-                // Показать модальное окно Bootstrap с уведомлением
-                $('#successModal').modal('show');
-            }
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            var successMessage = '@TempData["SuccessMessage"]';
-            if (successMessage) {
-                $('#successModal').modal('show');
-
-                // Обработчик события закрытия модального окна
-                $('#successModal').on('hidden.bs.modal', function () {
-                    // Очистить сообщение об успехе в TempData после закрытия окна
-                    '@TempData["SuccessMessage"]' = null;
-                });
-            }
-        });
-    </script>
 
 }
 
@@ -192,11 +142,11 @@
         <div>
             <button class="custom-button" type="submit" onclick="Download">Отправить данные</button>
         </div>
-        <br />
 
-<div id="error-message" style="display: none">
-  Пожалуйста, исправьте ошибки в полях - цифры не должны повторяться!
-</div>
+    <div id="error-message" style="display: none">
+            <i>Пожалуйста, исправьте ошибки в полях - цифры не должны повторяться!</i>
+    </div>
+        <br />
 
     @foreach (var frame in Model.Frames)
     {
@@ -248,28 +198,6 @@
 
 </div>
 </form>
-
-<!-- Модальное окно Bootstrap -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="successModalLabel">Уведомление</h5>
-@*                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    @* <span aria-hidden="true">&times;</span> 
-                </button> *@
-            </div>
-            <div class="modal-body">
-                @TempData["SuccessMessage"]
-            </div>
-            <div class="modal-footer">
-                @* <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button> *@
-            </div>
-        </div>
-    </div>
-</div>
-
-
 
 
 
