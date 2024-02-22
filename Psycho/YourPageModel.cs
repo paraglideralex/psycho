@@ -117,6 +117,22 @@ public class YourPageModel : PageModel
         return ans;
     }
 
+    private string ReportExcel()
+    {
+        List<string> list = new List<string>();
+
+        foreach (var frame in Frames)
+        {
+            foreach (var field in frame.FrameContent)
+            {
+                list.Add(field.Value);
+            }
+        }
+
+        string answer = $"{DateTime.Now}\r\n{LastName} {FirstName} {MiddleName}\r\n{string.Join('\t', list)}";
+        return answer;
+    }
+
     /*
     private void UpdateHistory(List<string> values)
     {
@@ -207,14 +223,11 @@ public class YourPageModel : PageModel
     public byte[] CreateBinary(string answer)
     {
         // получаем данные из TempData
-        string fil = Report(answer);
-        //string fil = PageState.Result;
+        //string fil = Report(answer);
+        string fil = ReportExcel();
+
         byte[] fileData = Encoding.UTF8.GetBytes(fil);// TempData["file"] as byte[];
         return fileData;
-
-        //string fileName = "results.txt";
-
-        //return File(fileData, "text/txt", fileName);
     }
 
 

@@ -76,7 +76,7 @@ button.addEventListener('click', function (event) {
             Swal.fire({
                 icon: 'success',
                 title: 'Успешно!',
-                text: 'Тест успешно пройден, ответ отправлен!'
+                text: 'Тест успешно пройден, отчёт скачан в формате .txt!'
             });
             //button.setAttribute("disabled", "false");
         }

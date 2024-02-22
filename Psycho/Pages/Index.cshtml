@@ -4,13 +4,9 @@
     ViewData["Title"] = "Тестирование";
 }
 
-
 @section scripts {
-  
     <script src="~/js/index.js"></script>
     <script src="~/js/sweetalert2.js"></script>
-
-
 }
 
 
@@ -30,6 +26,7 @@
 
     .question-frame {
         border: 1px solid #ccc;
+        border-radius: 8px;
         padding: 10px;
         margin: 10px;
         width: 400px;
@@ -124,29 +121,29 @@
 <div class="text-center">
     <div class="put">
         <h5 for="firstName">Фамилия:</h5>
-            <input type="text" id="lastName" name="LastName"  required />
+        <input type="text" id="lastName" name="LastName"  required />
     </div>
 
-        <div class="put">
+    <div class="put">
         <h5 for="lastName">Имя:</h5>
-            <input type="text" id="firstName" name="FirstName"  required />
+        <input type="text" id="firstName" name="FirstName"  required />
     </div>
 
-        <div class="put">
+    <div class="put">
         <h5 for="middleName">Отчество:</h5>
-            <input type="text" id="middleName" name="MiddleName"  required />
+        <input type="text" id="middleName" name="MiddleName"  required />
     </div>
-        <br />
-        <br />
+    <br />
+    <br />
 
-        <div>
-            <button class="custom-button" type="submit" onclick="Download">Отправить данные</button>
-        </div>
+    <div>
+        <button class="custom-button" type="submit" onclick="Download">Отправить данные</button>
+    </div>
 
     <div id="error-message" style="display: none">
-            <i>Пожалуйста, исправьте ошибки в полях - цифры не должны повторяться!</i>
+        <i>Пожалуйста, исправьте ошибки в полях - цифры не должны повторяться!</i>
     </div>
-        <br />
+    <br />
 
     @foreach (var frame in Model.Frames)
     {
@@ -191,11 +188,7 @@
                  }
             </div>
         </div>
-
     }
-
-
-
 </div>
 </form>
 
