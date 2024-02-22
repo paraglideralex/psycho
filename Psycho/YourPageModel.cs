@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Psycho;
 
+using SocialApp.Services;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class YourPageModel : PageModel
@@ -230,9 +232,15 @@ public class YourPageModel : PageModel
         return fileData;
     }
 
+    public async Task<IActionResult> SendMessage()
+    {
+        EmailService emailService = new EmailService();
+        await emailService.SendEmailAsync("alexvt1997@mail.ru", "Тема письма", "Тест письма: тест!");
+        return RedirectToPage();
+    }
 
     [HttpPost]
-    public IActionResult OnPost(List<string> values)
+    public async Task<IActionResult> OnPost(List<string> values)
     {
         //UpdateHistory(values);
 
@@ -248,8 +256,8 @@ public class YourPageModel : PageModel
 
         //TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
 
-        
 
+        //SendMessage();
 
         //TempData["file"] = Report(answer);
 
@@ -258,9 +266,9 @@ public class YourPageModel : PageModel
         //Frames.Clear();
 
         //CleanHistory();
-
+        await SendMessage();
         //return RedirectToPage();
-
+        //return SendMessage();
         return File(CreateBinary(answer), "text/txt", "results.txt");
     }
 
