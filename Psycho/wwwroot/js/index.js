@@ -3,6 +3,53 @@ let hasDuplicates = false;
 
 const submitButton = document.querySelector('.custom-button');
 
+function SelectionsChange() {
+    if (Dublicates()) {
+        showError();
+    }
+    else {
+        hideError();
+    }
+}
+
+function Dublicates() {
+    let id = 0;
+    frames.forEach(frame => {
+
+        const selects = frame.querySelectorAll('select');
+
+        selects.forEach(select => {
+
+            const values = [];
+
+            selects.forEach(s => {
+                values.push(s.value);
+            });
+
+            const uniqueValues = new Set(values);
+
+            if (uniqueValues.size !== values.length) {
+                frame.style.border = '2px solid #F19393';
+                //showError();
+                hasDuplicates = true;
+                id = id + 1
+            } else {
+                frame.style.border = '';
+                //hideError();
+                hasDuplicates = false;
+            }
+
+        });
+
+    });
+    if (id > 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 frames.forEach(frame => {
 
     const selects = frame.querySelectorAll('select');
@@ -21,11 +68,11 @@ frames.forEach(frame => {
 
             if (uniqueValues.size !== values.length) {
                 frame.style.border = '2px solid #F19393';
-                showError();
+                //showError();
                 hasDuplicates = true;
             } else {
                 frame.style.border = '';
-                hideError();
+                //hideError();
                 hasDuplicates = false;
             }
 
@@ -62,13 +109,13 @@ function checkFields() {
 }
 
 button.addEventListener('click', function (event) {
-    if (hasDuplicates) { // Укажите здесь ваше условие
+    if (Dublicates()) { // Укажите здесь ваше условие
         event.preventDefault();
         //button.setAttribute("disabled", "true");
         Swal.fire({
             icon: 'error',
             title: 'Ошибка!',
-            text: 'Сначала исправьте ошибки в полях! Цифры не должны повторяться.'
+            text: 'Сначала исправьте ошибки в рамках, выделенных красным! Цифры не должны повторяться.'
         });
     } else {
         if (checkFields()) {
@@ -76,7 +123,7 @@ button.addEventListener('click', function (event) {
             Swal.fire({
                 icon: 'success',
                 title: 'Успешно!',
-                text: 'Тест успешно пройден, отчёт скачан в формате .txt!'
+                text: 'Тест успешно заполнен! Данные для дальнейшей обработки скачаны в файл results.txt!'
             });
             //button.setAttribute("disabled", "false");
         }
