@@ -19,7 +19,9 @@ namespace SocialApp.Services
 
             var builder = new BodyBuilder();
             builder.TextBody = message;
-            builder.Attachments.Add("results.txt");
+
+            // если кто-то захочет прикреплять файл к письму, то делать это здесь. Пока всё просто пишется в письмо, может, так и удобнее
+            // builder.Attachments.Add("results.txt"); 
 
             emailMessage.Body = builder.ToMessageBody();
 

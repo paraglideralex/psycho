@@ -134,7 +134,7 @@ public class YourPageModel : PageModel
     public async Task<IActionResult> SendMessage(string emailTo)
     {
         EmailService emailService = new EmailService();
-        await emailService.SendEmailAsync(emailTo, "Ответы на психологический тест", "Ответы находятся в файле results.txt");
+        await emailService.SendEmailAsync(emailTo, "Ответы на психологический тест", ReportExcel());
         return RedirectToPage();
     }
 
@@ -144,8 +144,10 @@ public class YourPageModel : PageModel
         Frames.Clear();
         FillFrames(values);
 
-        var process = new TestProcessor(values);
+        // тут можно гонять процессор тестов, когда он будет кем-то допилен (не мной)
+        var process = new TestProcessor(values); 
         var answer = process.Process();
+
 
         using var writer = new StreamWriter("results.txt");
         {
