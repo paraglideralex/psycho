@@ -149,11 +149,11 @@ public class YourPageModel : PageModel
         var answer = process.Process();
 
 
-        using var writer = new StreamWriter("results.txt");
-        {
-            writer.Write(ReportExcel());
-            writer.Close();
-        }
+        //using var writer = new StreamWriter("results.txt");
+        //{
+        //    writer.Write(ReportExcel());
+        //    writer.Close();
+        //}
 
         await SendMessage("alexvt1997@mail.ru");
 
