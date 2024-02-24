@@ -123,7 +123,7 @@ button.addEventListener('click', function (event) {
             Swal.fire({
                 icon: 'success',
                 title: 'Успешно!',
-                text: 'Тест успешно заполнен! Данные для дальнейшей обработки скачаны в файл results.txt!'
+                text: 'Тест успешно заполнен! Данные скачаны в файл results.txt и отправлены на почту организаторам.'
             });
             //button.setAttribute("disabled", "false");
         }

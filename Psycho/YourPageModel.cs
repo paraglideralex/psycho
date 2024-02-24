@@ -42,23 +42,6 @@ public class YourPageModel : PageModel
         }
     }
 
-    private string Report(string answer)
-    {
-        string ans = "";
-        ans += $"Фамилия;{LastName}\r\nИмя;{FirstName}\r\nОтчество;{MiddleName}\r\n";
-
-        foreach (var frame in Frames)
-        {
-            foreach (var field in frame.FrameContent)
-            {
-                ans += $"{field.FieldName};{field.Value}\r\n";
-            }
-            
-        }
-        ans += $"Ваш подтип;{answer}\r\n";
-        return ans;
-    }
-
     private string ReportExcel()
     {
         List<string> list = new List<string>();
@@ -158,43 +141,24 @@ public class YourPageModel : PageModel
     [HttpPost]
     public async Task<IActionResult> OnPost(List<string> values)
     {
-        //UpdateHistory(values);
-
-        //if(CheckDuplicates(values, out int counter))
-        //{
-        //    return OnDuplicates(counter);
-        //}
         Frames.Clear();
         FillFrames(values);
 
         var process = new TestProcessor(values);
         var answer = process.Process();
 
-        //TempData["SuccessMessage"] = $"Ваш подтип: {answer}";
-
-
-        //SendMessage();
-
-        //TempData["file"] = Report(answer);
-
-        //PageState.Result = Report(answer);
-
-        //Frames.Clear();
         using var writer = new StreamWriter("results.txt");
         {
             writer.Write(ReportExcel());
             writer.Close();
         }
 
-        //CleanHistory();
-        await SendMessage("paraglideralex@yandex.ru");
-        //return RedirectToPage();
-        //return SendMessage();
+        await SendMessage("alexvt1997@mail.ru");
+
         return File(CreateBinary(answer), "text/txt", "results.txt");
     }
 
     public async Task OnGetAsync()
     {
-        //await FillNew();
     }
 }

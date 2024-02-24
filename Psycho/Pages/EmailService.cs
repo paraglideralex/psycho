@@ -11,7 +11,7 @@ namespace SocialApp.Services
         {
             using var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Администрация сайта", "trialectica@mail.ru"));
+            emailMessage.From.Add(new MailboxAddress("Trialectica - психологический тест", "trialectica@mail.ru"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
 
