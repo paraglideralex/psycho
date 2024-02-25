@@ -155,7 +155,7 @@ public class YourPageModel : PageModel
         //    writer.Close();
         //}
 
-        await SendMessage("alexvt1997@mail.ru");
+        await SendMessage("vladshatalov@yandex.ru");
 
         return File(CreateBinary(answer), "text/txt", "results.txt");
     }

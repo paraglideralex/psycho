@@ -21,8 +21,6 @@ public static class PageState
         string path = questions;
         List<string> lines = new List<string>();
 
-
-        // Используем StreamReader для чтения файла построчно
         using (StreamReader reader = new StreamReader(path))
         {
             string line;
